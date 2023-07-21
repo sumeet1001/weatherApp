@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="homePagePadding">15dp</dimen>
+    <dimen name="appMarginTop">12dp</dimen>
+    <dimen name="defaultMarginTop">15dp</dimen>
+    <dimen name="mbCardTitle">6dp</dimen>
+    <dimen name="cardElevation">8dp</dimen>
+</resources>

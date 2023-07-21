@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">weatherApp</string>
+    <string name="windTitle">Wind</string>
+    <string name="humidityTitle">Humidity</string>
+    <string name="rainTitle">Rain</string>
+    <string name="feelsLikeTitle">Feels Like</string>
+</resources>
