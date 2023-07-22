@@ -4,4 +4,7 @@
     <string name="humidityTitle">Humidity</string>
     <string name="rainTitle">Rain</string>
     <string name="feelsLikeTitle">Feels Like</string>
+    <string name="no_data_found">No data found</string>
+    <string name="no_internet_image">no internet image</string>
+    <string name="today_s_weather">Today\'s Weather</string>
 </resources>

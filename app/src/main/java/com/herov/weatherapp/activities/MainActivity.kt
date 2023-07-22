@@ -22,6 +22,7 @@ import com.herov.weatherapp.databinding.ActivityMainBinding
 import com.herov.weatherapp.model.WeatherModel
 import com.herov.weatherapp.network.RetrofitClient
 import com.herov.weatherapp.services.ApiService
+import com.herov.weatherapp.services.DataStoreManager
 import com.herov.weatherapp.services.LocationManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,11 +36,13 @@ class MainActivity : AppCompatActivity(), LocationManager.LocationPermissionCall
     private var apiService: ApiService? = null
     private lateinit var locationManager: LocationManager
     private var locationSettingsLauncher: ActivityResultLauncher<Intent>? = null
-//    private var internetSettingLauncher: ActivityResultLauncher<Intent>? = null
+    private lateinit var dataStoreManager: DataStoreManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        dataStoreManager = DataStoreManager(applicationContext)
         setContentView(binding?.root)
+        setSupportActionBar(binding?.myToolbar)
         binding?.swipeRefreshLayout?.setOnRefreshListener(this)
         loadingSpinner = binding?.loadingProgress!!
         locationManager = LocationManager(this, this, this)
@@ -116,6 +119,15 @@ class MainActivity : AppCompatActivity(), LocationManager.LocationPermissionCall
                 locationSettingsLauncher?.launch(intent)
             }.setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
+                lifecycleScope.launch {
+                    val cords = dataStoreManager.getLatLon()
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Showing last saved location or default location data",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    getWeatherData(cords.lon, cords.lat)
+                }
             }
             .create()
             .show()
@@ -195,6 +207,9 @@ class MainActivity : AppCompatActivity(), LocationManager.LocationPermissionCall
     override fun addOnSuccessListener(location: Location) {
         val lat = location.latitude.toString()
         val lon = location.longitude.toString()
+        lifecycleScope.launch {
+            dataStoreManager.saveLatLon(lat, lon)
+        }
         getWeatherData(lat, lon)
     }
 
